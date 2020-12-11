@@ -5,6 +5,7 @@ import styles from "./index.module.css";
 const Gallery = (props) => {
   // Declaring a new state variable, which we'll call "photos"
   const [photos, setPhotos] = useState([]);
+  let [page, setPage] = useState(1);
 
   // Declaring a variable "getPhotos", which is assigned to a asynchronous arrow function.
   // In this function we use fetch to get data from our's backend.
@@ -35,15 +36,37 @@ const Gallery = (props) => {
   return (
     <div className={styles.App}>
       <h2 className={styles.heading}>Gallery Page</h2>
-        {photos.length
-          ? photos.map((photo) => (
-              <div key={photo.url}>
-                <p>Album Id: {photo.albumId}; Photo Id: {photo.id}</p>
-                <p>Photo title: {photo.title}</p>
-                <img src={photo.url} alt={`Number ${photo.id}`}></img>
-              </div>
-            ))
-          : null}
+      <button
+        // the button is disabled if page showing the first 10 photos
+        disabled={page === 1}
+        // when user clicked the button, this code change (set) the value of the page in the component's state to its previous value decreased by 1.
+        onClick={() => {
+          setPage(() => page--);
+        }}
+      >
+        Previous 10 photos
+      </button>
+      <button
+        // the button is disabled if page showing the last 10 photos
+        disabled={page === photos.length / 10}
+        // when user clicked the button, this code change (set) the value of the page in the component's state to its previous value incereased by 1.
+        onClick={() => {
+          setPage(() => page++);
+        }}
+      >
+        Next 10 photos
+      </button>
+      {photos.length
+        ? photos.slice((page - 1) * 10, (page - 1) * 10 + 10).map((photo) => (
+            <div key={photo.url}>
+              <p>
+                Album Id: {photo.albumId}; Photo Id: {photo.id}
+              </p>
+              <p>Photo title: {photo.title}</p>
+              <img src={photo.url} alt={`Number ${photo.id}`}></img>
+            </div>
+          ))
+        : null}
     </div>
   );
 };
