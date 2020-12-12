@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styles from "./index.module.css";
-import Button from "../../components/Button";
+
+import Heading from "../../components/Heading";
 import Photo from "../../components/Photo";
+
+import styles from "./index.module.css";
 
 const Gallery = (props) => {
   // Declaring a new state variable, which we'll call "photos"
@@ -57,33 +59,11 @@ const Gallery = (props) => {
 
   return (
     <div className={styles.App}>
-      <h2 className={styles.heading}>
-        <Button
-          // props isDisabled is true if page equal to 1, or if we are on the first page
-          isDisabled={page === 1}
-          // props funcChangePage keep reference to function changePage, and give us opportunity to
-          // execute this function in children component.
-          funcChangePage={changePage}
-          // step is used like argument in the above function, and increase or decrease the page
-          step={-1}
-        >
-          Previous 10 photos
-        </Button>
-
-        <span>Gallery Page</span>
-
-        <Button
-          // props isDisabled is true if page equal to 5, or if we are on the last page
-          isDisabled={page === photos.length / 10}
-          // props funcChangePage keep reference to function changePage, and give us opportunity to
-          // execute this function in children component.
-          funcChangePage={changePage}
-          // step is used like argument in the above function, and increase or decrease the page
-          step={1}
-        >
-          Next 10 photos
-        </Button>
-      </h2>
+      <Heading
+        page={page}
+        changePage={changePage}
+        photosLengt={photos.length}
+      />
 
       <div className={styles.gallery__container}>{showingPhotos}</div>
     </div>
