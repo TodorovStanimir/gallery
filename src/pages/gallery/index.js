@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-
 import styles from "./index.module.css";
+import Button from "../../components/Button";
 
 const Gallery = (props) => {
   // Declaring a new state variable, which we'll call "photos"
   const [photos, setPhotos] = useState([]);
+
+  // Declaring a new state variable, which we'll call "page"
   let [page, setPage] = useState(1);
 
   // Declaring a variable "getPhotos", which is assigned to a asynchronous arrow function.
@@ -16,15 +18,25 @@ const Gallery = (props) => {
     const photos = loadedPhotos.filter(
       (photo, index) =>
         // we use percentage division to find each album with an even ID
+
         photo.albumId % 2 === 0 &&
         // if previous condition is true /albumId is even/, we are going to checking the next condition
         // is the albumId of the current photo different than the albumId of the previous photo /photo is first of album/
         // if these two conditions are true, the filter method will include the current photo in the results Array
         photo.albumId !== loadedPhotos[index - 1].albumId
     );
+
     // after we get photos, we set the state of the component to them
     // this mean we changing state and rerender the component
     setPhotos(photos);
+  };
+
+  // Declaring a variable "changePage", which is assigned to a arrow function.
+  // This function receives only one argument digit 1 or -1 and adds this argument to the current page
+  // after we change the page, we set the state with the new calculated page and rerender pictures matching the new page
+  const changePage = (step) => {
+    const newPage = page + step;
+    setPage(newPage);
   };
 
   // In useEffect we execute our function to fetch photos from the backend, and because array of dependencies is empty
@@ -36,26 +48,31 @@ const Gallery = (props) => {
   return (
     <div className={styles.App}>
       <h2 className={styles.heading}>Gallery Page</h2>
-      <button
-        // the button is disabled if page showing the first 10 photos
-        disabled={page === 1}
-        // when user clicked the button, this code change (set) the value of the page in the component's state to its previous value decreased by 1.
-        onClick={() => {
-          setPage(() => page--);
-        }}
+
+      <Button
+        // props isDisabled is true if page equal to 1, or if we are on the first page
+        isDisabled={page === 1}
+        // props funcChangePage keep reference to function changePage, and give us opportunity to
+        // execute this function in children component.
+        funcChangePage={changePage}
+        // step is used like argument in the above function, and increase or decrease the page
+        step={-1}
       >
         Previous 10 photos
-      </button>
-      <button
-        // the button is disabled if page showing the last 10 photos
-        disabled={page === photos.length / 10}
-        // when user clicked the button, this code change (set) the value of the page in the component's state to its previous value incereased by 1.
-        onClick={() => {
-          setPage(() => page++);
-        }}
+      </Button>
+
+      <Button
+        // props isDisabled is true if page equal to 5, or if we are on the last page
+        isDisabled={page === photos.length / 10}
+        // props funcChangePage keep reference to function changePage, and give us opportunity to
+        // execute this function in children component.
+        funcChangePage={changePage}
+        // step is used like argument in the above function, and increase or decrease the page
+        step={1}
       >
         Next 10 photos
-      </button>
+      </Button>
+
       {photos.length
         ? photos.slice((page - 1) * 10, (page - 1) * 10 + 10).map((photo) => (
             <div key={photo.url}>
