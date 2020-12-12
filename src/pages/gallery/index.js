@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import Button from "../../components/Button";
+import Photo from "../../components/Photo";
 
 const Gallery = (props) => {
   // Declaring a new state variable, which we'll call "photos"
@@ -45,6 +46,15 @@ const Gallery = (props) => {
     getPhotos();
   }, []);
 
+  // Declaring a variable "showingPhotos", which is assigned to a arrow of 10 instances of the "Photo" component.
+  const showingPhotos = photos.length
+    ? photos
+        // on the base of the page number, the code here return new array of 10 pictures from the all pictures
+        .slice((page - 1) * 10, (page - 1) * 10 + 10)
+        // from this new array we forming 10 instances of the "Photo" component
+        .map((photo, ind) => <Photo key={photo.url} photo={photo} ind={ind} />)
+    : null;
+
   return (
     <div className={styles.App}>
       <h2 className={styles.heading}>
@@ -75,34 +85,7 @@ const Gallery = (props) => {
         </Button>
       </h2>
 
-      <div className={styles.gallery__container}>
-        {photos.length
-          ? photos
-              .slice((page - 1) * 10, (page - 1) * 10 + 10)
-              .map((photo, ind) => (
-                <div
-                  className={
-                    styles[ind % 2 ? "gallery__item--1" : "gallery__item--2"]
-                  }
-                  key={photo.url}
-                >
-                  <p className={styles.gallery__item__title}>
-                    Photo title: {photo.title}
-                  </p>
-
-                  <img
-                    className={styles.gallery__item__photo}
-                    src={photo.url}
-                    alt={`Number ${photo.id}`}
-                  ></img>
-
-                  <p className={styles.gallery__item__info}>
-                    Album Id: {photo.albumId}; Photo Id: {photo.id}
-                  </p>
-                </div>
-              ))
-          : null}
-      </div>
+      <div className={styles.gallery__container}>{showingPhotos}</div>
     </div>
   );
 };
