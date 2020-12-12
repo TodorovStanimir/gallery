@@ -73,17 +73,27 @@ const Gallery = (props) => {
         Next 10 photos
       </Button>
 
-      {photos.length
-        ? photos.slice((page - 1) * 10, (page - 1) * 10 + 10).map((photo) => (
-            <div key={photo.url}>
-              <p>
-                Album Id: {photo.albumId}; Photo Id: {photo.id}
-              </p>
-              <p>Photo title: {photo.title}</p>
-              <img src={photo.url} alt={`Number ${photo.id}`}></img>
-            </div>
-          ))
-        : null}
+      <div className={styles.gallery__container}>
+        {photos.length
+          ? photos.slice((page - 1) * 10, (page - 1) * 10 + 10).map((photo) => (
+              <div className={styles.gallery__item} key={photo.url}>
+                <p className={styles.gallery__item__title}>
+                  Photo title: {photo.title}
+                </p>
+
+                <img
+                  className={styles.gallery__item__photo}
+                  src={photo.url}
+                  alt={`Number ${photo.id}`}
+                ></img>
+                
+                <p className={styles.gallery__item__info}>
+                  Album Id: {photo.albumId}; Photo Id: {photo.id}
+                </p>
+              </div>
+            ))
+          : null}
+      </div>
     </div>
   );
 };
