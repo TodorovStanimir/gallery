@@ -75,23 +75,30 @@ const Gallery = (props) => {
 
       <div className={styles.gallery__container}>
         {photos.length
-          ? photos.slice((page - 1) * 10, (page - 1) * 10 + 10).map((photo) => (
-              <div className={styles.gallery__item} key={photo.url}>
-                <p className={styles.gallery__item__title}>
-                  Photo title: {photo.title}
-                </p>
+          ? photos
+              .slice((page - 1) * 10, (page - 1) * 10 + 10)
+              .map((photo, ind) => (
+                <div
+                  className={
+                    styles[ind % 2 ? "gallery__item--1" : "gallery__item--2"]
+                  }
+                  key={photo.url}
+                >
+                  <p className={styles.gallery__item__title}>
+                    Photo title: {photo.title}
+                  </p>
 
-                <img
-                  className={styles.gallery__item__photo}
-                  src={photo.url}
-                  alt={`Number ${photo.id}`}
-                ></img>
-                
-                <p className={styles.gallery__item__info}>
-                  Album Id: {photo.albumId}; Photo Id: {photo.id}
-                </p>
-              </div>
-            ))
+                  <img
+                    className={styles.gallery__item__photo}
+                    src={photo.url}
+                    alt={`Number ${photo.id}`}
+                  ></img>
+
+                  <p className={styles.gallery__item__info}>
+                    Album Id: {photo.albumId}; Photo Id: {photo.id}
+                  </p>
+                </div>
+              ))
           : null}
       </div>
     </div>

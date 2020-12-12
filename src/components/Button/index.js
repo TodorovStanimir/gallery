@@ -6,6 +6,8 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     "margin-left": theme.spacing(3),
     "margin-right": theme.spacing(3),
+    "margin-top": theme.spacing(1),
+    "margin-bottom": theme.spacing(1),
     width: theme.spacing(25),
   },
 }));
