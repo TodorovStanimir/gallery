@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Heading from "../../components/Heading";
 import Photo from "../../components/Photo";
+import { fetchPhotos } from "../../services/data-service";
 
 import styles from "./index.module.css";
 
@@ -13,22 +14,16 @@ const Gallery = (props) => {
   let [page, setPage] = useState(1);
 
   // Declaring a variable "getPhotos", which is assigned to a asynchronous arrow function.
-  // In this function we use fetch to get data from our's backend.
-  // Then we use filter method to take the 1-st image of each album with an even ID
+  // In this function we use function fetchPhotos to get data from our's backend.
   const getPhotos = async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/photos");
-    const loadedPhotos = await response.json();
-    const photos = loadedPhotos.filter(
-      (photo, index) =>
-        // we use percentage division to find each album with an even ID
+    const photos = await fetchPhotos();
 
-        photo.albumId % 2 === 0 &&
-        // if previous condition is true /albumId is even/, we are going to checking the next condition
-        // is the albumId of the current photo different than the albumId of the previous photo /photo is first of album/
-        // if these two conditions are true, the filter method will include the current photo in the results Array
-        photo.albumId !== loadedPhotos[index - 1].albumId
-    );
-
+    //we checking is the variable "photos" an Array, and if it is not stoping the execution of the program
+    if (!Array.isArray(photos)) {
+      // here we can make notification, to show the error to the user
+      console.log(photos);
+      return;
+    }
     // after we get photos, we set the state of the component to them
     // this mean we changing state and rerender the component
     setPhotos(photos);
